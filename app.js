@@ -114,6 +114,7 @@ searchBtn.addEventListener('click', function () {
   clearInterval(timer);
   const search = document.getElementById('search');
   getImages(search.value)
+  search.value = "";
   sliders.length = 0;
 })
 
