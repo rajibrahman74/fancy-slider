@@ -5,6 +5,7 @@ const searchBtn = document.getElementById("search-btn");
 const sliderBtn = document.getElementById("create-slider");
 const sliderContainer = document.getElementById("sliders");
 const search = document.getElementById("search");
+const errorMessage = document.getElementById("error-message");
 // selected image
 let sliders = [];
 
@@ -32,7 +33,17 @@ const getImages = (query) => {
     `https://pixabay.com/api/?key=${KEY}=${query}&image_type=photo&pretty=true`
   )
     .then((response) => response.json())
-    .then((data) => showImages(data.hits))
+    .then((data) => {
+      if (data.hits.length > 0) {
+        const imagesArea = document.querySelector(".images");
+        imagesArea.style.display = "none";
+        showImages(data.hits);
+        errorMessage.innerHTML = "";
+      }
+      else {
+        return errorMessage.innerHTML = "Data not found";
+      }
+    })
     .catch((err) => console.log(err));
 };
 
@@ -114,9 +125,15 @@ const changeSlide = (index) => {
 searchBtn.addEventListener("click", function () {
   document.querySelector(".main").style.display = "none";
   clearInterval(timer);
-  getImages(search.value);
-  search.value = "";
-  sliders.length = 0;
+  const search = document.getElementById("search");
+  if (search.value.length === 0) {
+    imagesArea.style.display = "none";
+    errorMessage.innerText = "Please write something";
+  } else {
+    getImages(search.value);
+    search.value = "";
+    sliders.length = 0;
+  }
 });
 
 sliderBtn.addEventListener("click", function () {
