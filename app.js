@@ -39,9 +39,8 @@ const getImages = (query) => {
         imagesArea.style.display = "none";
         showImages(data.hits);
         errorMessage.innerHTML = "";
-      }
-      else {
-        return errorMessage.innerHTML = "Data not found";
+      } else {
+        return (errorMessage.innerHTML = "Data not found");
       }
     })
     .catch((err) => console.log(err));
@@ -79,22 +78,26 @@ const createSlider = () => {
 
   sliderContainer.appendChild(prevNext);
   document.querySelector(".main").style.display = "block";
-  // hide image aria
-  imagesArea.style.display = "none";
   const duration = document.getElementById("duration").value || 1000;
-  sliders.forEach((slide) => {
-    let item = document.createElement("div");
-    item.className = "slider-item";
-    item.innerHTML = `<img class="w-100"
-    src="${slide}"
-    alt="">`;
-    sliderContainer.appendChild(item);
-  });
-  changeSlide(0);
-  timer = setInterval(function () {
-    slideIndex++;
-    changeSlide(slideIndex);
-  }, duration);
+  if (duration > 0) {
+    // hide image aria
+    imagesArea.style.display = "none";
+    sliders.forEach((slide) => {
+      let item = document.createElement("div");
+      item.className = "slider-item";
+      item.innerHTML = `<img class="w-100"
+      src="${slide}"
+      alt="">`;
+      sliderContainer.appendChild(item);
+    });
+    changeSlide(0);
+    timer = setInterval(function () {
+      slideIndex++;
+      changeSlide(slideIndex);
+    }, duration);
+  } else {
+    return (errorMessage.innerHTML = "Please provide positive value");
+  }
 };
 
 // change slider index
@@ -139,7 +142,6 @@ searchBtn.addEventListener("click", function () {
 sliderBtn.addEventListener("click", function () {
   createSlider();
 });
-
 
 // enter key press and see the image
 
